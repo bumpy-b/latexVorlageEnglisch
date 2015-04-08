@@ -5,7 +5,7 @@
 %% Datum: 06.07.2011
 %%**************************************************************
 
-\newcommand{\pdftitel}{Title of the document}
+\newcommand{\pdftitel}{PDF Title of the document}
 \newcommand{\autor}{Max Mustermann}
 \newcommand{\arbeit}{Bachelor thesis}
 
@@ -27,28 +27,37 @@
 \newcommand{\zeitraum}{12 Weeks}
 
 \makeglossaries
-\input{glossary}
+\input{frontbackmatter/glossary}
 
 \begin{document}
 
 	% Deckblatt
 	\begin{spacing}{1}
-		\input{deckblatt}
+		\input{frontbackmatter/deckblatt}
 	\end{spacing}
 	\newpage
 	
-	\renewcommand{\thepage}{\Roman{page}}
-	\setcounter{page}{1}
+	\pagenumbering{Roman}
+	
+	% Sperrvermerk
+	\input{frontbackmatter/sperrvermerk}
+	\newpage
 	
 	% Erklärung
-	\input{erklaerung}
+	\input{frontbackmatter/erklaerung}
 	\newpage
 
 	% Abstract
-	\input{abstract}
+	\input{frontbackmatter/abstract}
 	\newpage
 
-	\pagestyle{plain}
+	\pagestyle{plain}		% nur Seitenzahlen im Fuß
+
+	% Verzeichnisse
+
+	\RedeclareSectionCommand[beforeskip=20pt]{chapter}	% stellt Abstand vor Kapitelüberschriften ein
+%	\titlespacing*{\chapter}{0pt}{-50pt}{40pt} % this removes "before" spacing (the second length argument)
+%	\renewcommand*\chapterheadstartvskip{\vspace*{-\topskip}} % this removes spacing before chapter titles
 
 	% Inhaltsverzeichnis
 	\begin{spacing}{1.1}
@@ -57,46 +66,51 @@
 	\end{spacing}
 	\newpage
 
-	\renewcommand{\thepage}{\arabic{page}}
-	\setcounter{page}{1}
-
-	% Inhalt
-	\input{content/01kapitel}
-	\input{content/02kapitel}
-
-	% Anhang
-	\clearpage
-	\pagenumbering{roman}
+	% Abkürzungsverzeichnis
+	% vorher in Konsole folgendes aufrufen: 
+	%	makeglossaries makeglossaries dokumentation.acn && makeglossaries dokumentation.glo
+	\cleardoublepage
+	\phantomsection \label{listofacs}
+	\addcontentsline{toc}{chapter}{Abbreviations}
+	\input{frontbackmatter/acronyms}
+	\printglossary[type=\acronymtype]		% altes Abkürzungsverzeichnis
 
 	% Abbildungsverzeichnis
 	\cleardoublepage
-	\phantomsection \label{listoffig}
-	\addcontentsline{toc}{chapter}{List of figures}
 	\listoffigures
 
 	%Tabellenverzeichnis
 	\cleardoublepage
-	\phantomsection \label{listoftab}
-	\addcontentsline{toc}{chapter}{List of tables}
 	\listoftables
 
 	% Quellcodeverzeichnis
 	\cleardoublepage
-	\phantomsection \label{listoflist}
-	\addcontentsline{toc}{chapter}{Listings}
 	\lstlistoflistings
+	\cleardoublepage
+
+	\pagenumbering{arabic}
+	\pagestyle{headings}		% Kolumnentitel im Kopf, Seitenzahlen im Fuß
+
+	% Inhalt
+	\foreach \i in {01,02,03,...,99} {%
+		\edef\FileName{content/\i kapitel}%
+			\IfFileExists{\FileName}{%
+				\input{\FileName}
+			}
+			{%
+				%file does not exist
+			}
+	}
+
 
 	% Literaturverzeichnis
 	\cleardoublepage
-	\phantomsection \label{listoflit}
-	\addcontentsline{toc}{chapter}{Bibliography}
-	\input{literatur}
-
-	% Abkürzungsverzeichnis
-	% vorher in Konsole folgendes aufrufen: 
-	%	makeglossaries makeglossaries dokumentation.acn && makeglossaries dokumentation.glo
-	\printglossary[type=\acronymtype]
+	\printbibliography
+%	\phantomsection \label{listoflit}
+%	\addcontentsline{toc}{chapter}{Bibliography}
+	\input{frontbackmatter/literatur}		% altes Literaturverzeichnis
 
 	% Glossar
 	\printglossary[style=altlist,title=Glossary]
+	
 \end{document}

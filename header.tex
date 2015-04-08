@@ -1,106 +1,160 @@
 %
 % Nahezu alle Einstellungen koennen hier getaetigt werden
 %
+%
+\RequirePackage[l2tabu, orthodox]{nag}	% weist in Commandozeile bzw. log auf veraltete LaTeX Syntax hin
 
 \documentclass[%
-	pdftex,
-	oneside,        % Einseitiger Druck.
-	12pt,           % Schriftgroesse
-	parskip=half,   % Halbe Zeile Abstand zwischen Absätzen.
-	headsepline,    % Linie nach Kopfzeile.
-	footsepline,    % Linie vor Fusszeile.
-	abstracton,     % Abstract Überschriften
-	english,        % Translator
-]{scrreprt}
+	oneside,        	% Einseitiger Druck.
+	12pt,           		% Schriftgroesse
+	parskip=half,		% Halbe Zeile Abstand zwischen Absätzen.
+%	topmargin = 10pt,	% Abstand Seitenrand (Std:1in) zu Kopfzeile [laut log: unused]
+	headheight = 12pt,	% Höhe der Kopfzeile
+%	headsep = 30pt,	% Abstand zwischen Kopfzeile und Text Body  [laut log: unused]
+	headsepline,		% Linie nach Kopfzeile.
+	footsepline,		% Linie vor Fusszeile.
+	abstracton,		% Abstract Überschriften
+	english,        		% Translator
+	DIV=calc,		% Satzspiegel berechnen
+	BCOR=8mm,		% Bindekorrektur links: 8mm
+	headinclude=true,	% Kopfzeile in den Satzspiegel einbeziehen
+	footinclude=false,	% Fußzeile nicht in den Satzspiegel einbeziehen
+	listof=totoc,		% Abbildungs-/ Tabellenverzeichnis im Inhaltsverzeichnis darstellen
+	toc=bibliography,	% Literaturverzeichnis im Inhaltsverzeichnis darstellen
+]{scrreprt}	% Koma-Script report Klasse , fuer laengere Bachelorarbeiten alternativ auch: scrbook
 
-%Seitengroesse
-\usepackage{fullpage}
 
-%Zeilenumbruch und mehr
-\usepackage[activate]{microtype}
-
-% Zeichencodierung
-\usepackage[utf8]{inputenc}
+%%%%%%% Package Includes %%%%%%%
+%%%%%%% 
+\usepackage[margin=2.5cm,foot=1cm]{geometry}	% Seitenränder und Abstände
+\usepackage[activate]{microtype}	% Zeilenumbruch und mehr, für besseren Zeichensatz
+%\usepackage{titlesec}			% für Veränderung von Titel/Überschriften-Darstellung (sollte jedoch nicht mit KOMA-Script kombiniert werden
+\usepackage[utf8]{inputenc}		% Zeichencodierung
 \usepackage[T1]{fontenc}
-
-% Zeilenabstand
-\usepackage[onehalfspacing]{setspace}
-
-% Index-Erstellung
-\usepackage{makeidx}
-
-% Lokalisierung (englische Sprache)
-\usepackage[english]{babel}
-
-% Anführungszeichen 
-\usepackage[babel,german=quotes]{csquotes}
+\usepackage[onehalfspacing]{setspace}% Zeilenabstand
+\usepackage{makeidx}			% Index-Erstellung
+\usepackage[english]{babel}		% Lokalisierung (englische Sprache)
+\usepackage[babel,autostyle=true]{csquotes}% Anführungszeichen 
+%\usepackage[babel,german=quotes]{csquotes}
 %\usepackage[style=swiss]{csquotes}
+\usepackage[right]{eurosym}		% Euro symbol: €
+\usepackage{pgffor} 			% für automatische Kapiteldateieinbindung
+\usepackage[perpage, hang, multiple, stable]{footmisc} % Fussnoten
 
-
-% Spezielle Tabellenform fuer Deckblatt
+% Spezielle Tabellenform für Deckblatt
 \usepackage{longtable}
 \setlength{\tabcolsep}{10pt} %Abstand zwischen Spalten
 \renewcommand{\arraystretch}{1.5} %Zeilenabstand
 
 % Grafiken
-\usepackage{graphicx}
+\usepackage{url,graphicx}
+\usepackage{float} % for [H]
+\usepackage{wrapfig}
+\graphicspath{{images/}}% Bildpfad
+
+% Alter some LaTeX defaults for better treatment of figures: (source: http://www-rohan.sdsu.edu/~aty/bibliog/latex/floats.html)
+    % See p.105 of "TeX Unbound" for suggested values.
+    % See pp. 199-200 of Lamport's "LaTeX" book for details.
+    %   General parameters, for ALL pages:
+    \renewcommand{\topfraction}{0.9}	% max fraction of floats at top
+    \renewcommand{\bottomfraction}{0.8}	% max fraction of floats at bottom
+    %   Parameters for TEXT pages (not float pages):
+    \setcounter{topnumber}{2}
+    \setcounter{bottomnumber}{2}
+    \setcounter{totalnumber}{4}     % 2 may work better
+    \setcounter{dbltopnumber}{2}    % for 2-column pages
+    \renewcommand{\dbltopfraction}{0.9}	% fit big float above 2-col. text
+    \renewcommand{\textfraction}{0.07}	% allow minimal text w. figs
+    %   Parameters for FLOAT pages (not text pages):
+    \renewcommand{\floatpagefraction}{0.7}	% require fuller float pages
+	% N.B.: floatpagefraction MUST be less than topfraction !!
+    \renewcommand{\dblfloatpagefraction}{0.7}	% require fuller float pages
+
+	% remember to use [htp] or [htpb] for placement
+
 
 % Mathematische Textsaetze
-%\usepackage{amsmath}
-%\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amssymb}
 
 % Pakete um Textteile drehen zu können, oder eine Seite Querformat anzeigen kann.
 %\usepackage{rotating}
 %\usepackage{lscape}
 
 % Farben
+\usepackage{xcolor}
 \usepackage{color}
-\definecolor{LinkColor}{rgb}{0,0,0.2}
-\definecolor{ListingBackground}{rgb}{0.92,0.92,0.92}
+\definecolor{LinkColor}{rgb}{0,0.1,0.3}
+\definecolor{ListingBackground}{rgb}{0.9,0.9,0.9}
 
-% PDF Einstellungen
-\usepackage[%
-	pdftitle={\pdftitel},
-	pdfauthor={\autor},
-	pdfsubject={\arbeit},
-	pdfcreator={pdflatex, LaTeX with KOMA-Script},
-	pdfpagemode=UseOutlines, % Beim Oeffnen Inhaltsverzeichnis anzeigen
-	pdfdisplaydoctitle=true, % Dokumenttitel statt Dateiname anzeigen.
-	pdflang=eng % Sprache des Dokuments.
-]{hyperref}
+%\usepackage{draftwatermark} \SetWatermarkLightness{0}
 
-% (Farb-)einstellungen für die Links im PDF
-\hypersetup{%
-	colorlinks=false, % Aktivieren von farbigen Links im Dokument
-	linkcolor=LinkColor, % Farbe festlegen
-	citecolor=LinkColor,
-	filecolor=LinkColor,
-	menucolor=LinkColor,
-	urlcolor=LinkColor,
-	bookmarksnumbered=true % Überschriftsnummerierung im PDF Inhalt anzeigen.
-}
+
+% Glossar
+\usepackage[
+	nonumberlist, %keine Seitenzahlen anzeigen
+	acronym,      %ein Abkürzungsverzeichnis erstellen
+	%section,     %im Inhaltsverzeichnis auf section-Ebene erscheinen
+	toc,          %Einträge im Inhaltsverzeichnis
+]{glossaries}
+
+% Abbreviations / Acronyms / Abkürzungen
+\usepackage[printonlyused]{acronym} % falls gewünscht kann die Option footnote eingefügt werden, dann wird die Erklärung nicht inline sondern in einer Fußnote dargestellt
+
+% Literaturverweise 
+\usepackage[
+	backend=biber,		% empfohlen. Falls biber Probleme macht: bibtex
+	bibwarn=true,
+	bibencoding=utf8,	% wenn .bib in utf8, sonst ascii
+	sortlocale=en_US,
+	style= numeric-comp,		% siehe auch unten
+]{biblatex}
+
+\addbibresource{bibliographie.bib}
+%\addbibresource{weitereDatei.bib}
+
+%% Zitierstil (nur wenn kein biblatex verwendet wird)
+%% siehe: http://ctan.mirrorcatalogs.com/macros/latex/contrib/biblatex/doc/biblatex.pdf (3.3.1 Citation Styles)
+%% mögliche Werte z.B numeric-comp, alphabetic, authoryear
+%\bibliographystyle{unsrt}
+
 
 % Verschiedene Schriftarten
 %\usepackage{goudysans}
-%\usepackage{lmodern}
+\usepackage{lmodern}
 %\usepackage{libertine}
-\usepackage{palatino} 
+%\usepackage{palatino} 
+\usepackage{courier} % Schriftart für monospaced
+
+%%\usepackage{fontspec}		% requires XeTex
+%\setsansfont{Calibri}
+%\setmonofont{Consolas}
+
+% Schriftart in Captions etwas kleiner
+\addtokomafont{caption}{\small}
+
 
 % Hurenkinder und Schusterjungen verhindern
 % http://projekte.dante.de/DanteFAQ/Silbentrennung
-\clubpenalty=10000
-\widowpenalty=10000
+\clubpenalty = 10000 % schließt Schusterjungen aus (Seitenumbruch nach der ersten Zeile eines neuen Absatzes)
+\widowpenalty = 10000 % schließt Hurenkinder aus (die letzte Zeile eines Absatzes steht auf einer neuen Seite)
 \displaywidowpenalty=10000
+
 
 % Quellcode
 \usepackage{listings}
-\lstloadlanguages{Java}
+%\usepackage{listing}
+\usepackage{jvlisting}
+
+\lstloadlanguages{PHP,Python,Java,C,C++,bash} % Einige häufig verwendete Sprachen
+
 \lstset{%
-	language=PHP,            % Sprache des Quellcodes
-	%numbers=left,           % Zeilennummern links
+	language=C,            % Sprache des Quellcodes
+	numbers=left,           % Zeilennummern links
 	stepnumber=1,            % Jede Zeile nummerieren.
 	numbersep=5pt,           % 5pt Abstand zum Quellcode
 	numberstyle=\tiny,       % Zeichengrösse 'tiny' für die Nummern.
+	frame=1,
 	breaklines=true,         % Zeilen umbrechen wenn notwendig.
 	breakautoindent=true,    % Nach dem Zeilenumbruch Zeile einrücken.
 	postbreak=\space,        % Bei Leerzeichen umbrechen.
@@ -111,18 +165,84 @@
 	extendedchars=true,      % Alle Zeichen vom Latin1 Zeichensatz anzeigen.
 	captionpos=b,            % sets the caption-position to bottom
 	backgroundcolor=\color{ListingBackground} % Hintergrundfarbe des Quellcodes setzen.
+	keywordstyle=\color[rgb]{0.133,0.133,0.6},
+	commentstyle=\color[rgb]{0.133,0.545,0.133},
+	stringstyle=\color[rgb]{0.627,0.126,0.941},
 }
 
-% Glossar
-\usepackage[
-	nonumberlist, %keine Seitenzahlen anzeigen
-	acronym,      %ein Abkürzungsverzeichnis erstellen
-	%section,     %im Inhaltsverzeichnis auf section-Ebene erscheinen
-	toc,          %Einträge im Inhaltsverzeichnis
-]{glossaries}
+\lstset{%
+%	language=C++, 
+	basicstyle= \tiny \ttfamily, % \small
+	frame=tb, 			% top bottom frame lines; alternative: single or 1
+	columns=flexible, 
+	showspaces=false,  	% show spaces adding special underscores
+	showstringspaces=false,	% underline spaces within strings
+	showtabs=false,               	% show tabs within strings adding particular underscores
+	frame=lines,	                	% add a frame around the code
+	tabsize=2,	                	% default tabsize: 4 spaces
+	breaklines=true,                % automatic line breaking
+	breakatwhitespace=false,	% automatic breaks should only happen at whitespace
+	captionpos=b,            	% sets the caption-position to bottom
+	numbers=left, 
+	numberstyle=\tiny,
+	keywordstyle=\color[rgb]{0.133,0.133,0.6},
+	commentstyle=\color[rgb]{0.133,0.545,0.133},
+	stringstyle=\color[rgb]{0.627,0.126,0.941},
+	backgroundcolor=\color{ListingBackground} % Hintergrundfarbe des Quellcodes setzen.
+}
 
-% Fussnoten
-\usepackage[perpage, hang, multiple, stable]{footmisc}
+\lstset{
+	language=[Visual]C++,
+	keywordstyle=\bfseries\ttfamily\color[rgb]{0,0,1},
+	identifierstyle=\ttfamily,
+	commentstyle=\color[rgb]{0.133,0.545,0.133},
+	stringstyle=\ttfamily\color[rgb]{0.627,0.126,0.941},
+	showstringspaces=false,
+	basicstyle=\small,
+	numberstyle=\footnotesize,
+	numbers=left,
+	stepnumber=1,
+	numbersep=10pt,
+	tabsize=2,
+	breaklines=true,
+	prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+	breakatwhitespace=false,
+	aboveskip={1.5\baselineskip},
+  	columns=fixed,
+%  	upquote=true,		% requires textcomp package
+  	extendedchars=true,
+%	frame=single,
+% 	backgroundcolor=\color{lbcolor},
+}
+
+% PDF Einstellungen
+\usepackage[%
+	pdftitle={\pdftitel},
+	pdfauthor={\autor},
+	pdfsubject={\arbeit},
+	pdfcreator={pdflatex, LaTeX with KOMA-Script},
+	pdfstartview=FitH,
+	pdfhighlight=/I,
+	pdfpagemode=UseOutlines, % Beim Oeffnen Inhaltsverzeichnis anzeigen
+	pdfdisplaydoctitle=true, % Dokumenttitel statt Dateiname anzeigen.
+	pdflang=eng % Sprache des Dokuments.
+]{hyperref}
+
+% (Farb-)einstellungen für die Links im PDF
+\hypersetup{%
+	colorlinks=true, % Aktivieren von farbigen Links im Dokument
+	linkcolor=LinkColor, % Farbe festlegen
+	citecolor=LinkColor,
+	filecolor=LinkColor,
+	menucolor=LinkColor,
+	urlcolor=LinkColor,
+	raiselinks=true,		% raise up links (for HyperTeX backend; default: false).
+%	linktocpage=true, 		% Nicht der Text sondern die Seitenzahlen in Verzeichnissen klickbar
+	bookmarksnumbered=true % Überschriftsnummerierung im PDF Inhalt anzeigen.
+}
+% Workaround um Fehler in Hyperref, muss hier stehen bleiben
+\usepackage{bookmark} %nur ein latex-Durchlauf für die Aktualisierung von Verzeichnissen nötig
+
 
 % Titel, Autor und Datum
 \title{\titel}
